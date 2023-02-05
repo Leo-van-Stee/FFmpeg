@@ -1721,6 +1721,7 @@ static void print_report(int is_last_report, int64_t timer_start, int64_t cur_ti
         av_bprintf(&buf, " spaad=N/A");
         av_bprintf(&buf_script, "spaad=N/A\n");
     } else {
+         fprintf(stderr, " spaad=%4.3gx", speed); /*Leo*/
         av_bprintf(&buf, " spaad=%4.3gx", speed);
         av_bprintf(&buf_script, "spaad=%4.3gx\n", speed);
     }
