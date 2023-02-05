@@ -1718,11 +1718,11 @@ static void print_report(int is_last_report, int64_t timer_start, int64_t cur_ti
     av_bprintf(&buf_script, "drop_frames=%"PRId64"\n", nb_frames_drop);
 
     if (speed < 0) {
-        av_bprintf(&buf, " speed=N/A");
-        av_bprintf(&buf_script, "speed=N/A\n");
+        av_bprintf(&buf, " spaad=N/A");
+        av_bprintf(&buf_script, "spaad=N/A\n");
     } else {
-        av_bprintf(&buf, " speed=%4.3gx", speed);
-        av_bprintf(&buf_script, "speed=%4.3gx\n", speed);
+        av_bprintf(&buf, " spaad=%4.3gx", speed);
+        av_bprintf(&buf_script, "spaad=%4.3gx\n", speed);
     }
 
     if (print_stats || is_last_report) {
