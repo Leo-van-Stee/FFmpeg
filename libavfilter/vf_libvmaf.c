@@ -159,7 +159,8 @@ static int do_vmaf(FFFrameSync *fs)
         av_log(s, AV_LOG_ERROR, "problem during vmaf_read_pictures.\n");
         return AVERROR(EINVAL);
     }
-    av_log(ctx, AV_LOG_INFO, "LEO: I'm here in do_vmaf.\n")
+    /* och punt comma vergeten NIET DOEN KOST EEN uur...*/
+    av_log(ctx, AV_LOG_INFO, "LEO: I'm here in do_vmaf.\n"); 
 
     return ff_filter_frame(ctx->outputs[0], dist);
 }
