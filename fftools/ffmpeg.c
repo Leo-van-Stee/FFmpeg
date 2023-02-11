@@ -1725,8 +1725,6 @@ static void print_report(int is_last_report, int64_t timer_start, int64_t cur_ti
         av_bprintf(&buf, " spaad=%4.3gx", speed);
         av_bprintf(&buf_script, "spaad=%4.3gx\n", speed);
     }
-    fprintf(stderr, "%s    %c", buf.str, end); /*Leo*/
-    fflush(stderr);/*Leo*/
 
     if (print_stats || is_last_report) {
         const char end = is_last_report ? '\n' : '\r';
