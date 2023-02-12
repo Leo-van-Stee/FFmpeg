@@ -164,8 +164,8 @@ static int do_vmaf(FFFrameSync *fs)
 
     for (unsigned i = 0; i < s->model_cnt; i++) {
         double vmaf_score;
-        err = vmaf_score_pooled(s->vmaf, s->model[i], pool_method_map(s->pool), &vmaf_score, 0, s->frame_cnt - 1);
-        /*int err = vmaf_score_at_index(s->vmaf, s->model[i], &vmaf_score, s->frame_cnt - 1);*/
+       /* err = vmaf_score_pooled(s->vmaf, s->model[i], pool_method_map(s->pool), &vmaf_score, 0, s->frame_cnt - 1);*/
+        int err = vmaf_score_at_index(s->vmaf, s->model[i], &vmaf_score, s->frame_cnt - 2);
 
         if (err) {
             av_log(ctx, AV_LOG_ERROR,"problem in do_vmaf in vf_libvmaf.\n");
