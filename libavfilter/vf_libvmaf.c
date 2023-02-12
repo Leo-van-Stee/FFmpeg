@@ -156,10 +156,10 @@ static int do_vmaf(FFFrameSync *fs)
 
     err = vmaf_read_pictures(s->vmaf, &pic_ref, &pic_dist, s->frame_cnt++);
     if (err) {
-        av_log(s, AV_LOG_ERROR, "problem during vmaf_read_pictures.\n");
+        av_log(s, AV_LOG_ERROR, "problem during vmaf_read_poctures.\n");
         return AVERROR(EINVAL);
     }
-    av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEO\n");
+    av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
     return ff_filter_frame(ctx->outputs[0], dist);
 }
 
