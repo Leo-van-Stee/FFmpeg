@@ -159,6 +159,27 @@ static int do_vmaf(FFFrameSync *fs)
         av_log(s, AV_LOG_ERROR, "problem during vmaf_read_poctures.\n");
         return AVERROR(EINVAL);
     }
+
+    /*inserted from*/
+
+    for (unsigned i = 0; i < s->model_cnt; i++) {
+        double vmaf_score;
+        /*err = vmaf_score_pooled(s->vmaf, s->model[i], pool_method_map(s->pool), &vmaf_score, 0, s->frame_cnt - 1);*/
+        int err = vmaf_score_at_index(s->vmaf, s->model[i], &vmaf_score, s->frame_cnt-1);
+
+        if (err) {
+            av_log(ctx, AV_LOG_ERROR,"problem in do_vmaf in vf_libvmaf.\n");
+            }
+
+         av_log(ctx, AV_LOG_INFO, "VMAF LEOLEOscore: %f\n", vmaf_score);
+       }
+
+
+
+   
+
+
+ /*inserted from*/
     av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
     return ff_filter_frame(ctx->outputs[0], dist);
 }
