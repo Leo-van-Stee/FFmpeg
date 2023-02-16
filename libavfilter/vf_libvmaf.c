@@ -60,6 +60,17 @@ typedef struct LIBVMAFContext {
     unsigned bpc;
 } LIBVMAFContext;
 
+//VmafFeatureCollector copied from ..\vmaf\libvmaf\src\feature\feature_collector.h
+
+typedef struct VmafFeatureCollector {
+    FeatureVector** feature_vector;
+    AggregateVector aggregate_vector;
+    unsigned cnt, capacity;
+    struct { clock_t begin, end; } timer;
+    pthread_mutex_t lock;
+    } VmafFeatureCollector;
+
+
 #define OFFSET(x) offsetof(LIBVMAFContext, x)
 #define FLAGS AV_OPT_FLAG_FILTERING_PARAM|AV_OPT_FLAG_VIDEO_PARAM
 
@@ -131,6 +142,7 @@ static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
+    VmafFeatureCollector* fc=s->vmaf->feature_collector
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
@@ -172,31 +184,6 @@ static int do_vmaf(FFFrameSync *fs)
 
 
 
-		for (unsigned i = 0; i < max_capacity(s->vmaf->feature_collector); i++) {
-			if ((s->vmaf->cfg.n_subsample > 1) && (i % s->vmaf->cfg.n_subsample))
-				continue;
-
-			unsigned cnt = 0;
-			for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
-				if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
-					continue;
-				if (s->vmaf->feature_collector->feature_vector[j]->score[i].written)
-					cnt++;
-				}
-			if (!cnt) continue;
-
-			// fprintf(outfile, "{%d}{%d}frame: %d|", i, i + 1, i);
-			/* for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
-				if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
-					continue;
-				if (!s->vmaf->feature_collector->feature_vector[j]->score[i].written)
-					continue; */
-					/*             fprintf(outfile, "%s: %.6f|",
-										vmaf_feature_name_alias(s->vmaf->feature_collector->feature_vector[j]->name),
-										s->vmaf->feature_collector->feature_vector[j]->score[i].value); 
-			}*/
-		//fprintf(outfile, "\n"); 
-		}
 	av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
 	}
 /*inserted from*/
