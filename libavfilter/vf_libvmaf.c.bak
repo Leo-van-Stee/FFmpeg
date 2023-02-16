@@ -173,7 +173,7 @@ static int do_vmaf(FFFrameSync *fs)
 			
 			
 			
-			for (unsigned i = 0 ; i < max_capacity(s->vmaf->feature_collector); i++) {
+			for (unsigned i = 0 ; i < max_capacity(fc); i++) {
         if ((s->vmaf->cfg.n_subsample > 1) && (i % s->vmaf->cfg.n_subsample))
             continue;
 
