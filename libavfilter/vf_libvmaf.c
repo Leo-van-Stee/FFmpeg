@@ -171,7 +171,7 @@ static int do_vmaf(FFFrameSync *fs)
             av_log(ctx, AV_LOG_ERROR,"problem in do_vmaf in vf_libvmaf.\n");
             }
 
-         av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", s->frame_cnt - 2, vmaf_score);
+         av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", s->frame_cnt - 6, vmaf_score);
        }
 
 
