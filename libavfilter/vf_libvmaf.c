@@ -142,7 +142,7 @@ static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
-    VmafFeatureCollector* fc=s->vmaf->feature_collector
+    VmafFeatureCollector* fc=s->vmaf->feature_collector;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
