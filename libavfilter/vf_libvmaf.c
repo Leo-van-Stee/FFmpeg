@@ -186,11 +186,11 @@ static int do_vmaf(FFFrameSync *fs)
         if (!cnt) continue;
 
         // fprintf(outfile, "{%d}{%d}frame: %d|", i, i + 1, i);
-        for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
+         for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
             if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
                 continue;
             if (!s->vmaf->feature_collector->feature_vector[j]->score[i].written)
-                continue;
+                continue; 
 /*             fprintf(outfile, "%s: %.6f|",
                     vmaf_feature_name_alias(s->vmaf->feature_collector->feature_vector[j]->name),
                     s->vmaf->feature_collector->feature_vector[j]->score[i].value); */
