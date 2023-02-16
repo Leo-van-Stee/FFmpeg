@@ -154,54 +154,54 @@ static int do_vmaf(FFFrameSync *fs)
         return AVERROR(ENOMEM);
     }
 
-    err = vmaf_read_pictures(s->vmaf, &pic_ref, &pic_dist, s->frame_cnt++);
-    if (err) {
-        av_log(s, AV_LOG_ERROR, "problem during vmaf_read_poctures.\n");
-        return AVERROR(EINVAL);
-    }
+	err = vmaf_read_pictures(s->vmaf, &pic_ref, &pic_dist, s->frame_cnt++);
+	if (err) {
+		av_log(s, AV_LOG_ERROR, "problem during vmaf_read_poctures.\n");
+		return AVERROR(EINVAL);
+		}
 
     /*inserted from*/
 
-    for (unsigned x = 0; x < s->model_cnt; x++) {
-        double vmaf_score;
+	for (unsigned x = 0; x < s->model_cnt; x++) {
+		double vmaf_score;
 		int MyFrame = s->frame_cnt - 2;
-        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
-        if (err) {
-            av_log(ctx, AV_LOG_ERROR,"problem in do_vmaf in vf_libvmaf.\n");
-            }
-			
-			
-			
-			for (unsigned i = 0 ; i < max_capacity(s->vmaf->feature_collector); i++) {
-        if ((s->vmaf->cfg.n_subsample > 1) && (i % s->vmaf->cfg.n_subsample))
-            continue;
+		int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
+		if (err) {
+			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
+			}
 
-        unsigned cnt = 0;
-        for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
-            if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
-                continue;
-            if (s->vmaf->feature_collector->feature_vector[j]->score[i].written)
-                cnt++;
-        }
-        if (!cnt) continue;
 
-        // fprintf(outfile, "{%d}{%d}frame: %d|", i, i + 1, i);
-        /* for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
-            if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
-                continue;
-            if (!s->vmaf->feature_collector->feature_vector[j]->score[i].written)
-                continue; */
-/*             fprintf(outfile, "%s: %.6f|",
-                    vmaf_feature_name_alias(s->vmaf->feature_collector->feature_vector[j]->name),
-                    s->vmaf->feature_collector->feature_vector[j]->score[i].value); */
-        }
-        //fprintf(outfile, "\n"); 
-    }
-		 av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
-       }
- /*inserted from*/
-    av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
-    return ff_filter_frame(ctx->outputs[0], dist);
+
+		for (unsigned i = 0; i < max_capacity(s->vmaf->feature_collector); i++) {
+			if ((s->vmaf->cfg.n_subsample > 1) && (i % s->vmaf->cfg.n_subsample))
+				continue;
+
+			unsigned cnt = 0;
+			for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
+				if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
+					continue;
+				if (s->vmaf->feature_collector->feature_vector[j]->score[i].written)
+					cnt++;
+				}
+			if (!cnt) continue;
+
+			// fprintf(outfile, "{%d}{%d}frame: %d|", i, i + 1, i);
+			/* for (unsigned j = 0; j < s->vmaf->feature_collector->cnt; j++) {
+				if (i > s->vmaf->feature_collector->feature_vector[j]->capacity)
+					continue;
+				if (!s->vmaf->feature_collector->feature_vector[j]->score[i].written)
+					continue; */
+					/*             fprintf(outfile, "%s: %.6f|",
+										vmaf_feature_name_alias(s->vmaf->feature_collector->feature_vector[j]->name),
+										s->vmaf->feature_collector->feature_vector[j]->score[i].value); 
+			}*/
+		//fprintf(outfile, "\n"); 
+		}
+	av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
+	}
+/*inserted from*/
+av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
+return ff_filter_frame(ctx->outputs[0], dist);
 }
 
 
