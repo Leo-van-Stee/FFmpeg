@@ -24,8 +24,10 @@
  * Calculate the VMAF between two input videos.
  */
 
-#include <libvmaf.h>
 
+#include <libvmaf.c> //Leo
+#include <libvmaf.h>
+#include <feature_collector.h>; //Leo
 #include "libavutil/avstring.h"
 #include "libavutil/opt.h"
 #include "libavutil/pixdesc.h"
@@ -35,55 +37,12 @@
 #include "framesync.h"
 #include "internal.h"
 #include "video.h"
-#include <stdbool.h>
+#include <stdbool.h> //Leo
 
 
 
-typedef struct {
-    char* name;
-    struct {
-        bool written;
-        double value;
-        } *score;
-    unsigned capacity;
-    } FeatureVector;
 
 
-//typedef struct VmafFeatureCollector copied from feature_collector.h by Leo 17feb23
-typedef struct VmafFeatureCollector {
-    FeatureVector** feature_vector;
-    AggregateVector aggregate_vector;
-    unsigned cnt, capacity;
-    struct { clock_t begin, end; } timer;
-    pthread_mutex_t lock;
-    } VmafFeatureCollector;
-
-
-
- // typedef struct VmafContext  copied from libvmaf.c by Leo 17feb23
-typedef struct VmafContext {
-    VmafConfiguration cfg;
-    VmafFeatureCollector* feature_collector;
-    RegisteredFeatureExtractors registered_feature_extractors;
-    VmafFeatureExtractorContextPool* fex_ctx_pool;
-    VmafThreadPool* thread_pool;
-#ifdef HAVE_CUDA
-    struct {
-        VmafCudaConfiguration cfg;
-        VmafCudaState state;
-        VmafCudaCookie cookie;
-        VmafRingBuffer* ring_buffer;
-        } cuda;
-#endif
-    struct {
-        unsigned w, h;
-        enum VmafPixelFormat pix_fmt;
-        unsigned bpc;
-        enum VmafPictureBufferType buf_type;
-        } pic_params;
-    unsigned pic_cnt;
-    bool flushed;
-    } VmafContext;
 
 typedef struct LIBVMAFContext {
     const AVClass *class;
