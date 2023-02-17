@@ -37,6 +37,18 @@
 #include "video.h"
 #include <stdbool.h>
 
+
+
+typedef struct {
+    char* name;
+    struct {
+        bool written;
+        double value;
+        } *score;
+    unsigned capacity;
+    } FeatureVector;
+
+
 //typedef struct VmafFeatureCollector copied from feature_collector.h by Leo 17feb23
 typedef struct VmafFeatureCollector {
     FeatureVector** feature_vector;
