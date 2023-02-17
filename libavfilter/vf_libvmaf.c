@@ -36,6 +36,31 @@
 #include "internal.h"
 #include "video.h"
 
+ // typedef struct VmafContext  copied from libvmaf.c by Leo 17feb23
+typedef struct VmafContext {
+    VmafConfiguration cfg;
+    VmafFeatureCollector* feature_collector;
+    RegisteredFeatureExtractors registered_feature_extractors;
+    VmafFeatureExtractorContextPool* fex_ctx_pool;
+    VmafThreadPool* thread_pool;
+#ifdef HAVE_CUDA
+    struct {
+        VmafCudaConfiguration cfg;
+        VmafCudaState state;
+        VmafCudaCookie cookie;
+        VmafRingBuffer* ring_buffer;
+        } cuda;
+#endif
+    struct {
+        unsigned w, h;
+        enum VmafPixelFormat pix_fmt;
+        unsigned bpc;
+        enum VmafPictureBufferType buf_type;
+        } pic_params;
+    unsigned pic_cnt;
+    bool flushed;
+    } VmafContext;
+
 typedef struct LIBVMAFContext {
     const AVClass *class;
     FFFrameSync fs;
@@ -60,15 +85,7 @@ typedef struct LIBVMAFContext {
     unsigned bpc;
 } LIBVMAFContext;
 
-//VmafFeatureCollector copied from ..\vmaf\libvmaf\src\feature\feature_collector.h
 
-typedef struct VmafFeatureCollector {
-    FeatureVector** feature_vector;
-    AggregateVector aggregate_vector;
-    unsigned cnt, capacity;
-    struct { clock_t begin, end; } timer;
-    pthread_mutex_t lock;
-    } VmafFeatureCollector;
 
 
 #define OFFSET(x) offsetof(LIBVMAFContext, x)
@@ -142,6 +159,7 @@ static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
+
     VmafFeatureCollector* fc=s->vmaf->feature_collector;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
@@ -173,6 +191,14 @@ static int do_vmaf(FFFrameSync *fs)
 		}
 
     /*inserted from*/
+    /* This: s->vmaf->feature_collector; does not work here because s is pointer to LIBVMAFContext,
+    and s->vmaf should be a VmafContext, but somehow not recognised because ?? it is not defined in libvmaf.h ??
+    I don't know, C is not my specialty.
+    when you call e.g. vmaf_score_at_index, that is in the Netflix libvmaf, it gets treated as a VmafContext
+    which does have a feature_collector property
+    
+    
+    */
 
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		double vmaf_score;
