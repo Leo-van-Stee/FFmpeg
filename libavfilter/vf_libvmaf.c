@@ -36,6 +36,17 @@
 #include "internal.h"
 #include "video.h"
 
+//typedef struct VmafFeatureCollector copied from feature_collector.h by Leo 17feb23
+typedef struct VmafFeatureCollector {
+    FeatureVector** feature_vector;
+    AggregateVector aggregate_vector;
+    unsigned cnt, capacity;
+    struct { clock_t begin, end; } timer;
+    pthread_mutex_t lock;
+    } VmafFeatureCollector;
+
+
+
  // typedef struct VmafContext  copied from libvmaf.c by Leo 17feb23
 typedef struct VmafContext {
     VmafConfiguration cfg;
@@ -160,7 +171,7 @@ static int do_vmaf(FFFrameSync *fs)
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
 
-    VmafFeatureCollector* fc=s->vmaf->feature_collector;
+    VmafFeatureCollector *fc=s->vmaf->feature_collector;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
