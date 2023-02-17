@@ -179,6 +179,18 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
     return 0;
 }
 
+static unsigned max_capacity(VmafFeatureCollector* fc) //Leo
+    {
+    unsigned capacity = 0;
+
+    for (unsigned j = 0; j < fc->cnt; j++) {
+        if (fc->feature_vector[j]->capacity > capacity)
+            capacity = fc->feature_vector[j]->capacity;
+        }
+
+    return capacity;
+    }
+
 static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
