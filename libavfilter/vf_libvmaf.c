@@ -194,7 +194,7 @@ static int do_vmaf(FFFrameSync *fs)
         av_log(NULL, AV_LOG_INFO, MyLine);
 
 
-	av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
+	av_log(ctx, AV_LOG_INFO, "VMAF 18FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
 	}
 /*inserted from*/
 av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
