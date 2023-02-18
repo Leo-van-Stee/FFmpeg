@@ -25,9 +25,7 @@
  */
 
 
-#include <libvmaf.c> //Leo
 #include <libvmaf.h>
-#include <feature_collector.h>; //Leo
 #include "libavutil/avstring.h"
 #include "libavutil/opt.h"
 #include "libavutil/pixdesc.h"
@@ -37,7 +35,7 @@
 #include "framesync.h"
 #include "internal.h"
 #include "video.h"
-#include <stdbool.h> //Leo
+
 
 
 
@@ -155,7 +153,7 @@ static int do_vmaf(FFFrameSync *fs)
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
 
-    VmafFeatureCollector *fc=s->vmaf->feature_collector;
+    //VmafFeatureCollector *fc=s->vmaf->feature_collector;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
@@ -198,50 +196,11 @@ static int do_vmaf(FFFrameSync *fs)
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		double vmaf_score;
 		int MyFrame = s->frame_cnt - 2;
+
 		int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
 		if (err) {
 			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
 			}
-
-
-
-        for (unsigned i = 0; i < max_capacity(fc); i++) 
-            {
-            if ((s->vmaf->cfg.n_subsample > 1) && (i % s->vmaf->cfg.n_subsample))
-                continue;
-
-            unsigned cnt = 0;
-            for (unsigned j = 0; j < fc->cnt; j++) {
-                if (i > fc->feature_vector[j]->capacity)
-                    continue;
-                if (fc->feature_vector[j]->score[i].written)
-                    cnt++;
-                }
-            if (!cnt) continue;
-
-            //fprintf(outfile, "{%d}{%d}frame: %d|", i, i + 1, i);
-            for (unsigned j = 0; j < fc->cnt; j++) {
-                if (i > fc->feature_vector[j]->capacity)
-                    continue;
-                if (!fc->feature_vector[j]->score[i].written)
-                    continue;
-               //fprintf(outfile, "%s: %.6f|",vmaf_feature_name_alias(fc->feature_vector[j]->name), fc->feature_vector[j]->score[i].value);
-                }
-            //fprintf(outfile, "\n");
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
