@@ -191,7 +191,7 @@ static int do_vmaf(FFFrameSync *fs)
 			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
 			}
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
-        av_log(NULL, AV_LOG_INFO,"18FEBA: %s\n", MyLine);
+        av_log(NULL, AV_LOG_INFO,"18FEBB: %s\n", MyLine);
 
 
 	av_log(ctx, AV_LOG_INFO, "VMAF 18FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
