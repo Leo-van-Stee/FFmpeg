@@ -146,7 +146,7 @@ static int do_vmaf(FFFrameSync *fs)
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
-
+    char MyLine[512];
     int ret = ff_framesync_dualinput_get(fs, &dist, &ref);
     if (ret < 0)
         return ret;
@@ -190,9 +190,8 @@ static int do_vmaf(FFFrameSync *fs)
 		if (err) {
 			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
 			}
-
-
-
+        vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
+        av_log(NULL, MyLine);
 
 
 	av_log(ctx, AV_LOG_INFO, "VMAF 16FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
