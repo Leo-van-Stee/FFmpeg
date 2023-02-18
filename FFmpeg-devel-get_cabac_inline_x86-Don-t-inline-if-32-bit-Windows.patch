@@ -1,0 +1,146 @@
+From patchwork Mon Jan  2 23:01:28 2023
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Patchwork-Submitter: Christopher Degawa <ccom@randomderp.com>
+X-Patchwork-Id: 39830
+Delivered-To: ffmpegpatchwork2@gmail.com
+Received: by 2002:a05:6a20:bc95:b0:ad:ade2:bfd2 with SMTP id
+ fx21csp7676114pzb;
+        Mon, 2 Jan 2023 15:01:52 -0800 (PST)
+X-Google-Smtp-Source: 
+ AMrXdXs8lsTS44jKPvP7dPEO/ZhIFLzJHBIcTNmA5zsynF1Ov0Oay2RVe17lr1Gh2bXnpFHEEYWO
+X-Received: by 2002:a17:906:fa14:b0:84c:a065:d727 with SMTP id
+ lo20-20020a170906fa1400b0084ca065d727mr10913766ejb.48.1672700512358;
+        Mon, 02 Jan 2023 15:01:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1672700512; cv=none;
+        d=google.com; s=arc-20160816;
+        b=gDrFIXluaUVUhl/PHLDJxcCJaSit09vWccGdx9e0QiSjMZOsC2+zADH7WEj4eh10Cn
+         S3Ote4Waato3vK0nBMn0brv5byEqbvXfwB7YT5b7mcjlRjijxRf0Q2yD+pfuGrSOn00J
+         Tci928TxocO+LyczF2zcV2KYLyIz8dVgyVKVOzwwhBSSHDxkEDCUGUKyHsMay53l9kD4
+         tHFzc46sijiEvAw/FIhYjxFX4jbVrDE7t//vMdJOqN3oQUj/DMlUHIoZ+g79Q1oOez2p
+         V+x5+xMzpDULj5wb4S2af/bYfO/7jmbCfFCaINS1O/Qzv2qK3LUcN7BbeBwJwUrEFWkr
+         V/lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20160816;
+        h=sender:errors-to:content-transfer-encoding:cc:reply-to
+         :list-subscribe:list-help:list-post:list-archive:list-unsubscribe
+         :list-id:precedence:subject:mime-version:message-id:date:to:from
+         :dkim-signature:delivered-to;
+        bh=iYdOYNuhDOTHvWK7GFECyRLf4Zk851aWHggS3cBe1F8=;
+        b=mQA4rLxP1zuBc6e029FmPZyak712xr8WOs5n8Bm7AAK1wKS26jLdNReXt+6ftGOyGs
+         jzSoTb2aTnYimvWZfF35egazJ8ukZpTZXRCRIW6qJ+jaAM1ZAZ6VWhtyGhh1HcnJvkhz
+         zVUER4wj3v62LDzEI5/j6TddxlxRRowHjgq7QcUlUPNJmOgxxYdxXi4fn3u/Zo8AYIKC
+         /hlpPKo7+2mLU/b4zAI/6CUOr9kWXbEocZyaQvwEpO8GcrpA/KzdUcCjcdnL4Y7KtN+Z
+         IH/Ei0VrlIqLY7WY5+RkAOOHf6WdMYvlT2ghkysnvJHqXemsv9tPk6pMsFXd9HVpB20Q
+         DBQA==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=neutral (body hash did not verify) header.i=@randomderp.com
+ header.s=default header.b=Ppo9BOXC;
+       spf=pass (google.com: domain of ffmpeg-devel-bounces@ffmpeg.org
+ designates 79.124.17.100 as permitted sender)
+ smtp.mailfrom=ffmpeg-devel-bounces@ffmpeg.org;
+       dmarc=fail (p=NONE sp=NONE dis=NONE) header.from=randomderp.com
+Return-Path: <ffmpeg-devel-bounces@ffmpeg.org>
+Received: from ffbox0-bg.mplayerhq.hu (ffbox0-bg.ffmpeg.org. [79.124.17.100])
+        by mx.google.com with ESMTP id
+ dm3-20020a170907948300b007be4dd9ef7csi24748539ejc.402.2023.01.02.15.01.51;
+        Mon, 02 Jan 2023 15:01:52 -0800 (PST)
+Received-SPF: pass (google.com: domain of ffmpeg-devel-bounces@ffmpeg.org
+ designates 79.124.17.100 as permitted sender) client-ip=79.124.17.100;
+Authentication-Results: mx.google.com;
+       dkim=neutral (body hash did not verify) header.i=@randomderp.com
+ header.s=default header.b=Ppo9BOXC;
+       spf=pass (google.com: domain of ffmpeg-devel-bounces@ffmpeg.org
+ designates 79.124.17.100 as permitted sender)
+ smtp.mailfrom=ffmpeg-devel-bounces@ffmpeg.org;
+       dmarc=fail (p=NONE sp=NONE dis=NONE) header.from=randomderp.com
+Received: from [127.0.1.1] (localhost [127.0.0.1])
+	by ffbox0-bg.mplayerhq.hu (Postfix) with ESMTP id 913C468BC1B;
+	Tue,  3 Jan 2023 01:01:48 +0200 (EET)
+X-Original-To: ffmpeg-devel@ffmpeg.org
+Delivered-To: ffmpeg-devel@ffmpeg.org
+Received: from degawa.com (174-127-109-95.slc.westdc.net [174.127.109.95])
+ by ffbox0-bg.mplayerhq.hu (Postfix) with ESMTPS id D007C68BC4A
+ for <ffmpeg-devel@ffmpeg.org>; Tue,  3 Jan 2023 01:01:42 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=randomderp.com; s=default; h=Content-Transfer-Encoding:MIME-Version:
+ Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+ List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=FRyyLKhsbAQyRBWO6pdjvjYmasg91prVMfxOFXYAOiI=; b=Ppo9BOXCJvizRGGhKcjMAedDrw
+ StPgzusqGi+tpGIkS7T8UHddJlY0aorneMeQiMn1NtgQ8a/y7cwchlYsrTm1Rvyeg6tYbExehwXvX
+ RH3JjvnUiF7IwzwJfHyl4ZIIVIvqyuTvAl8UhVuwVt+MxKmA7fysVdg1T/3xj79FaXy7zIsWHRLp5
+ BuWoQvG4j1HcrJOaOpsUn4jMLOIm3gUNoe/eqQC4GXBRuvjEPfwklSeiXJfRALWr6atzt7800ItoD
+ PMcUF/1rMRC/BQt/kh+zJYip/N4ujiZKJHXUQMGDMi3hojk0Vz3ugOeBndEw9L3uXmne1lV/YpKkt
+ LIFKBxhA==;
+Received: from 108-216-168-194.lightspeed.mmphtn.sbcglobal.net
+ ([108.216.168.194]:58674 helo=localhost.localdomain)
+ by slmp-550-1.slc.westdc.net with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.95)
+ (envelope-from <ccom@randomderp.com>) id 1pCToK-00C2cW-9F;
+ Mon, 02 Jan 2023 16:01:40 -0700
+From: Christopher Degawa <ccom@randomderp.com>
+To: ffmpeg-devel@ffmpeg.org
+Date: Mon,  2 Jan 2023 17:01:28 -0600
+Message-Id: <20230102230128.972907-1-ccom@randomderp.com>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - slmp-550-1.slc.westdc.net
+X-AntiAbuse: Original Domain - ffmpeg.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - randomderp.com
+X-Get-Message-Sender-Via: slmp-550-1.slc.westdc.net: authenticated_id:
+ ccom/from_h
+X-Authenticated-Sender: slmp-550-1.slc.westdc.net: ccom@randomderp.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+Subject: [FFmpeg-devel] [PATCH] get_cabac_inline_x86: Don't inline if 32-bit
+ Windows
+X-BeenThere: ffmpeg-devel@ffmpeg.org
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: FFmpeg development discussions and patches <ffmpeg-devel.ffmpeg.org>
+List-Unsubscribe: <https://ffmpeg.org/mailman/options/ffmpeg-devel>,
+ <mailto:ffmpeg-devel-request@ffmpeg.org?subject=unsubscribe>
+List-Archive: <https://ffmpeg.org/pipermail/ffmpeg-devel>
+List-Post: <mailto:ffmpeg-devel@ffmpeg.org>
+List-Help: <mailto:ffmpeg-devel-request@ffmpeg.org?subject=help>
+List-Subscribe: <https://ffmpeg.org/mailman/listinfo/ffmpeg-devel>,
+ <mailto:ffmpeg-devel-request@ffmpeg.org?subject=subscribe>
+Reply-To: FFmpeg development discussions and patches <ffmpeg-devel@ffmpeg.org>
+Cc: Christopher Degawa <ccom@randomderp.com>
+Errors-To: ffmpeg-devel-bounces@ffmpeg.org
+Sender: "ffmpeg-devel" <ffmpeg-devel-bounces@ffmpeg.org>
+X-TUID: bIgIf5ElA4y0
+
+previouslly, it only was an issue with 32-bit clang from msys2's
+mingw32 repo, however, at some point with an update to gcc 12.2.0,
+the same issue popped up. Tested with a clean clone of ffmpeg, and even
+tested with n5.0, but the issue persists, so I presume it's a compiler
+issue.
+
+Related: https://trac.ffmpeg.org/ticket/8903
+
+Signed-off-by: Christopher Degawa <ccom@randomderp.com>
+---
+ libavcodec/x86/cabac.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/x86/cabac.h b/libavcodec/x86/cabac.h
+index b046a56a6b..70f990db8d 100644
+--- a/libavcodec/x86/cabac.h
++++ b/libavcodec/x86/cabac.h
+@@ -178,7 +178,7 @@
+ #if HAVE_7REGS && !BROKEN_COMPILER
+ #define get_cabac_inline get_cabac_inline_x86
+ static
+-#if defined(_WIN32) && !defined(_WIN64) && defined(__clang__)
++#if defined(_WIN32) && !defined(_WIN64)
+ av_noinline
+ #else
+ av_always_inline

@@ -1,0 +1,15 @@
+CPPFLAGS: -D_FORTIFY_SOURCE=0 -D__USE_MINGW_ANSI_STDIO=1
+CFLAGS: -mthreads -mtune=generic -O2 -pipe
+CXXFLAGS: -mthreads -mtune=generic -O2 -pipe
+LDFLAGS: -pipe -static-libgcc -static-libstdc++
+vcs_reset d3cc86978807156733d93c82ba6afb73f8eff287
+++ vcs_get_latest_tag d3cc86978807156733d93c82ba6afb73f8eff287
+++ case $1 in
+++ false
+++ echo d3cc86978807156733d93c82ba6afb73f8eff287
++ git checkout --no-track -fB ab-suite d3cc86978807156733d93c82ba6afb73f8eff287
+Reset branch 'ab-suite'
+Your branch is up to date with 'origin/ab-suite'.
++ git log --oneline --no-merges --no-color -n 1
++ tee /dev/null
+d3cc869788 asd
