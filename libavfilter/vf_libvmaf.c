@@ -181,7 +181,7 @@ static int do_vmaf(FFFrameSync *fs)
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		int MyFrame = s->frame_cnt - 2;
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
-        av_log(NULL, AV_LOG_INFO,"18FEBB: %s\n", MyLine);
+        av_log(NULL, AV_LOG_INFO,"19FEBC: %s\n", MyLine);
 	}
 /*inserted from*/
 return ff_filter_frame(ctx->outputs[0], dist);
