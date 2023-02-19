@@ -35,12 +35,6 @@
 #include "framesync.h"
 #include "internal.h"
 #include "video.h"
-#include "feature/alias.h"  //Zwechon
-#include "feature/feature_collector.h" //Zwechon
-
-
-
-
 
 
 typedef struct LIBVMAFContext {
@@ -139,22 +133,6 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
     return 0;
 }
 
-//snprintf uses maximum capacity, it will not write more than n...
-int output_get_outputline_sub_Zwechona(VmafFeatureCollector* fc, unsigned frame, char* outputline) {
-    int strpos = 0;
-    for (unsigned featidx = 0; featidx < fc->cnt; featidx++) {
-        if (frame > fc->feature_vector[featidx]->capacity)
-            continue;
-        if (!fc->feature_vector[featidx]->score[frame].written)
-            continue;
-        strpos += snprintf(outputline + strpos, 510, "%s: %.6f|",
-            vmaf_feature_name_alias(fc->feature_vector[featidx]->name),
-            fc->feature_vector[featidx]->score[frame].value);
-        }
-    return 0;
-    }
-
-
 static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
@@ -194,16 +172,15 @@ static int do_vmaf(FFFrameSync *fs)
     I don't know, C is not my specialty.
     when you call e.g. vmaf_score_at_index, that is in the Netflix libvmaf, it gets treated as a VmafContext
     which does have a feature_collector property
-    
-    
+  
     */
 
     char MyLine[512];
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		int MyFrame = s->frame_cnt - 2;
-       // vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
-        output_get_outputline_sub_Zwechona((VmafContext)s->vmaf->feature_collector, MyFrame, MyLine);
-
+        //vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
+        //output_get_outputline_sub_Zwechona((VmafContext)s->vmaf->feature_collector, MyFrame, MyLine);
+        output_get_outputline_sub_Zwechon(s->vmaf, MyFrame, MyLine);
         av_log(NULL, AV_LOG_INFO,"18FEBB: %s\n", MyLine);
 	}
 /*inserted from*/
