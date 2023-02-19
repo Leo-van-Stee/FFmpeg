@@ -135,11 +135,13 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 
 static int do_vmaf(FFFrameSync *fs)
 {
+    char MyLine[512]; //Leo
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
+
 
     int ret = ff_framesync_dualinput_get(fs, &dist, &ref);
     if (ret < 0)
@@ -175,12 +177,12 @@ static int do_vmaf(FFFrameSync *fs)
   
     */
 
-    char MyLine[512];
+
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		int MyFrame = s->frame_cnt - 2;
         //vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
         //output_get_outputline_sub_Zwechona((VmafContext)s->vmaf->feature_collector, MyFrame, MyLine);
-        output_get_outputline_sub_Zwechon(s->vmaf, MyFrame, MyLine);
+        vmaf_get_outputline_sub_Zwechon(s->vmaf, MyFrame, MyLine);
         av_log(NULL, AV_LOG_INFO,"18FEBB: %s\n", MyLine);
 	}
 /*inserted from*/
