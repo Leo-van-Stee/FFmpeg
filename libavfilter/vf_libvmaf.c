@@ -180,6 +180,17 @@ static int do_vmaf(FFFrameSync *fs)
     char MyLine[512]; //Leo
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		int MyFrame = s->frame_cnt - 2;
+
+        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
+        if (err) {
+            av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
+            }
+        av_log(ctx, AV_LOG_INFO, "VMAF 19FEBC-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
+
+
+
+
+
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
         av_log(NULL, AV_LOG_INFO,"19FEBC: %s\n", MyLine);
 	}
