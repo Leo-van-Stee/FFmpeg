@@ -135,7 +135,7 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 
 static int do_vmaf(FFFrameSync *fs)
 {
-    char MyLine[512]; //Leo
+
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
     VmafPicture pic_ref, pic_dist;
@@ -177,7 +177,7 @@ static int do_vmaf(FFFrameSync *fs)
   
     */
 
-
+    char MyLine[512]; //Leo
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		int MyFrame = s->frame_cnt - 2;
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
