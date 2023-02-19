@@ -115,6 +115,8 @@ static enum VmafPixelFormat pix_fmt_map(enum AVPixelFormat av_pix_fmt)
     }
 }
 
+
+
 static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 {
     const int bytes_per_value = bpc > 8 ? 2 : 1;
@@ -136,17 +138,30 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
     return 0;
 }
 
+//snprintf uses maximum capacity, it will not write more than n...
+int output_get_outputline_sub_Zwechona(VmafFeatureCollector* fc, unsigned frame, char* outputline) {
+    int strpos = 0;
+    for (unsigned featidx = 0; featidx < fc->cnt; featidx++) {
+        if (frame > fc->feature_vector[featidx]->capacity)
+            continue;
+        if (!fc->feature_vector[featidx]->score[frame].written)
+            continue;
+        strpos += snprintf(outputline + strpos, 510, "%s: %.6f|",
+            vmaf_feature_name_alias(fc->feature_vector[featidx]->name),
+            fc->feature_vector[featidx]->score[frame].value);
+        }
+    return 0;
+    }
+
 
 static int do_vmaf(FFFrameSync *fs)
 {
     AVFilterContext *ctx = fs->parent;
     LIBVMAFContext *s = ctx->priv;
-
-    //VmafFeatureCollector *fc=s->vmaf->feature_collector;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
-    char MyLine[512];
+
     int ret = ff_framesync_dualinput_get(fs, &dist, &ref);
     if (ret < 0)
         return ret;
@@ -182,22 +197,15 @@ static int do_vmaf(FFFrameSync *fs)
     
     */
 
+    char MyLine[512];
 	for (unsigned x = 0; x < s->model_cnt; x++) {
-		double vmaf_score;
 		int MyFrame = s->frame_cnt - 2;
+       // vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
+        output_get_outputline_sub_Zwechona((VmafContext)s->vmaf->feature_collector, MyFrame, MyLine);
 
-		int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
-		if (err) {
-			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
-			}
-        vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
         av_log(NULL, AV_LOG_INFO,"18FEBB: %s\n", MyLine);
-
-
-	av_log(ctx, AV_LOG_INFO, "VMAF 18FEB-01-score: frame=%d score=%f\n", MyFrame, vmaf_score);
 	}
 /*inserted from*/
-av_log(NULL, AV_LOG_WARNING, "here in do_vmaf LEOLEO\n");
 return ff_filter_frame(ctx->outputs[0], dist);
 }
 
