@@ -35,7 +35,8 @@
 #include "framesync.h"
 #include "internal.h"
 #include "video.h"
-
+#include "feature/alias.h"  //Zwechon
+#include "feature/feature_collector.h" //Zwechon
 
 
 
