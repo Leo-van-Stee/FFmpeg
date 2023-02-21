@@ -182,7 +182,7 @@ static int do_vmaf(FFFrameSync *fs)
         double vmaf_score;
         char MyLine[512]; //Leo
 
-		int MyFrame = s->frame_cnt - 2;
+		int MyFrame = s->frame_cnt - 10;
 
         int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
         if (err) {
