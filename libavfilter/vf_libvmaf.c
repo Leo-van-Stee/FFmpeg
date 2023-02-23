@@ -190,7 +190,9 @@ static int do_vmaf(FFFrameSync *fs)
             }
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 
-        av_log(NULL, AV_LOG_INFO,"19FEBC: %s\n", MyLine);
+
+        av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
+        av_log(NULL, AV_LOG_INFO,"23FEBD: %s\n", MyLine);
 	}
 /*inserted from*/
 return ff_filter_frame(ctx->outputs[0], dist);
@@ -303,6 +305,77 @@ exit:
     av_free(dict);
     return err;
 }
+/*
+static int parse_features(AVFilterContext* ctx)
+    {
+    // Get a reference to the filter's private context
+    LIBVMAFContext* s = ctx->priv;
+    // Create an array of dictionaries for feature configuration options
+    AVDictionary** dict = NULL;
+    unsigned dict_cnt;
+    int err = 0;
+
+    // If no feature configuration options are present, return 0
+    if (!s->feature_cfg)
+        return 0;
+
+    // Parse the feature configuration options
+    dict = delimited_dict_parse(s->feature_cfg, &dict_cnt);
+    // If parsing fails, log an error and return an error code
+    if (!dict) {
+        av_log(ctx, AV_LOG_ERROR,
+            "could not parse feature config: %s\n", s->feature_cfg);
+        return AVERROR(EINVAL);
+        }
+
+    // Loop through each dictionary of feature configuration options
+    for (unsigned i = 0; i < dict_cnt; i++) {
+        // Initialize variables to store the feature name and options
+        char* feature_name = NULL;
+        VmafFeatureDictionary* feature_opts_dict = NULL;
+        const AVDictionaryEntry* e = NULL;
+
+        // Loop through each key-value pair in the current dictionary
+        while (e = av_dict_iterate(dict[i], e)) {
+            // If the key contains the string "name", set the feature name
+            if (av_stristr(e->key, "name")) {
+                feature_name = e->value;
+                continue;
+                }
+
+            // Set the current key-value pair as a feature option
+            err = vmaf_feature_dictionary_set(&feature_opts_dict, e->key,
+                e->value);
+            // If setting fails, log an error and jump to the "exit" label
+            if (err) {
+                av_log(ctx, AV_LOG_ERROR,
+                    "could not set feature option: %s.%s=%s\n",
+                    feature_name, e->key, e->value);
+                goto exit;
+                }
+            }
+
+        // Use the VMAF library to set the feature name and options
+        err = vmaf_use_feature(s->vmaf, feature_name, feature_opts_dict);
+        // If setting fails, log an error and jump to the "exit" label
+        if (err) {
+            av_log(ctx, AV_LOG_ERROR,
+                "problem during vmaf_use_feature: %s\n", feature_name);
+            goto exit;
+            }
+        }
+
+    // Free memory used by the feature configuration options dictionaries
+exit:
+    for (unsigned i = 0; i < dict_cnt; i++) {
+        if (dict[i])
+            av_dict_free(&dict[i]);
+        }
+    av_free(dict);
+    // Return the error code (if any)
+    return err;
+    }
+*/
 
 static int parse_models(AVFilterContext *ctx)
 {
