@@ -136,7 +136,7 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 static int do_vmaf(FFFrameSync *fs)
 {
 
-    AVFilterContext *ctx = fs->parent;
+    AVFilterContext *ctx = fs->parent; 
     LIBVMAFContext *s = ctx->priv;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
@@ -191,7 +191,7 @@ static int do_vmaf(FFFrameSync *fs)
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 
 
-        av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
+        //av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
         av_log(NULL, AV_LOG_INFO,"23FEBD: %s\n", MyLine);
 	}
 /*inserted from*/
