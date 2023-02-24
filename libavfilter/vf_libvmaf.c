@@ -185,10 +185,10 @@ static int do_vmaf(FFFrameSync *fs)
 
 		int MyFrame = s->frame_cnt - 10;
 
-        //int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
-        //if (err) {
-        //    av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
-        //    }
+        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, s->frame_cnt);
+        if (err) {
+            av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
+            }
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 
 
