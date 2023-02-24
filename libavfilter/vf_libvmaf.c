@@ -110,7 +110,11 @@ static enum VmafPixelFormat pix_fmt_map(enum AVPixelFormat av_pix_fmt)
     }
 }
 
-
+/*The bpc variable is a value that indicates the number of bits per color channel (bits per component) in the video stream. 
+The > operator is a comparison operator that checks if the value of bpc is greater than 8. If bpc is greater than 8, 
+bytes_per_value is assigned a value of 2, indicating that each color channel value will take up two bytes of memory.
+If bpc is less than or equal to 8, bytes_per_value is assigned a value of 1, indicating that each color channel value will
+take up one byte of memory.*/
 
 static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 {
@@ -135,13 +139,12 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 
 static int do_vmaf(FFFrameSync *fs)
 {
-
+    AVFilterLink* inlink = fs->in[0]->inputs[0]; //Leo
     AVFilterContext *ctx = fs->parent; 
     LIBVMAFContext *s = ctx->priv;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
     int err = 0;
-
 
     int ret = ff_framesync_dualinput_get(fs, &dist, &ref);
     if (ret < 0)
@@ -184,15 +187,15 @@ static int do_vmaf(FFFrameSync *fs)
 
 		int MyFrame = s->frame_cnt - 10;
 
-        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
-        if (err) {
-            av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
-            }
+        //int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
+        //if (err) {
+        //    av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
+        //    }
         vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 
 
         //av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
-        av_log(NULL, AV_LOG_INFO,"23FEBD: %s\n", MyLine);
+        av_log(NULL, AV_LOG_INFO,"24FEBE: %s\n", MyLine);
 	}
 /*inserted from*/
 return ff_filter_frame(ctx->outputs[0], dist);
