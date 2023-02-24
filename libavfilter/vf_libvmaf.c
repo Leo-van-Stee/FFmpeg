@@ -138,9 +138,7 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
 }
 
 static int do_vmaf(FFFrameSync *fs)
-{
-    AVFilterLink* inlink = fs->in[0]->inputs[0]; //Leo
-    AVFilterContext *ctx = fs->parent; 
+{   AVFilterContext *ctx = fs->parent; 
     LIBVMAFContext *s = ctx->priv;
     VmafPicture pic_ref, pic_dist;
     AVFrame *ref, *dist;
