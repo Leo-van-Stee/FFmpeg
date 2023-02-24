@@ -35,6 +35,7 @@
 #include "framesync.h"
 #include "internal.h"
 #include "video.h"
+#include <time.h> //Leo
 
 
 typedef struct LIBVMAFContext {
