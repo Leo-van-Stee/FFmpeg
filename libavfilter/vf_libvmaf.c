@@ -185,7 +185,7 @@ static int do_vmaf(FFFrameSync *fs)
 
 		int MyFrame = s->frame_cnt - 10;
 
-        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, s->frame_cnt-1);
+        int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
         if (err) {
             av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
             }
@@ -766,6 +766,15 @@ static av_cold void uninit(AVFilterContext *ctx)
 
         av_log(ctx, AV_LOG_INFO, "VMAF score: %f\n", vmaf_score);
     }
+    //insert by Leo
+    //now that all work has been done we know the total frames, namely s->frame_cnt
+    //for the last 10 remaining lines I print them here to the av_log
+    char MyLine[512]; //Leo
+    for (unsigned MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
+        vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
+        av_log(NULL, AV_LOG_INFO, "24FEBE: %s\n", MyLine);
+        }
+    //end insert by Leo
 
     if (s->vmaf) {
         if (s->log_path && !err)
