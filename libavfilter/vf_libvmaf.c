@@ -755,15 +755,11 @@ static av_cold void uninit(AVFilterContext *ctx)
                "problem flushing libvmaf context.\n");
     }
 
-    //insert by Leo
-//now that all work has been done we know the total frames, namely s->frame_cnt
-//for the last 10 remaining lines I print them here to the av_log
-    char MyLine[512]; //Leo
-    for (unsigned MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
-        vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
-        av_log(NULL, AV_LOG_INFO, "24FEBE: %s\n", MyLine);
-        }
-    //end insert by Leo
+
+
+
+    av_log(ctx, AV_LOG_INFO, "Next is a fast part....\n"); //Leo
+    clock_t start = clock(); //Leo
 
     for (unsigned i = 0; i < s->model_cnt; i++) {
         double vmaf_score;
@@ -773,6 +769,20 @@ static av_cold void uninit(AVFilterContext *ctx)
             av_log(ctx, AV_LOG_ERROR,
                    "problem getting pooled vmaf score.\n");
         }
+
+        av_log(ctx, AV_LOG_INFO, "Elapsed time: %f seconds\n",(double)(clock() - start) / CLOCKS_PER_SEC); //Leo
+        //insert by Leo
+    //now that all work has been done we know the total frames, namely s->frame_cnt
+    //for the last 10 remaining lines I print them here to the av_log
+        char MyLine[512]; //Leo
+        for (unsigned MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
+            vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
+            av_log(NULL, AV_LOG_INFO, "24FEBE: %s\n", MyLine);
+            }
+        //end insert by Leo
+
+
+
 
         av_log(ctx, AV_LOG_INFO, "VMAF score: %f\n", vmaf_score);
     }
