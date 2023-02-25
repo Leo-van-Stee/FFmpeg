@@ -204,9 +204,10 @@ static void print_program_info(int flags, int level)
                program_birth_year, CONFIG_THIS_YEAR);
     av_log(NULL, level, "\n");
     av_log(NULL, level, "%sbuilt with %s\n", indent, CC_IDENT);
-    av_log(NULL, level, "Custom version by Zwechon v. 1.00\n",);
-    av_log(NULL, level, "designed to output VMAF info on the fly\n", );
-    av_log(NULL, level, "no guarantees of other correct functioning.\n", );
+    av_log(NULL, level, "Custom version by Zwechon v. 1.00\n");
+    av_log(NULL, level, "designed to output VMAF info on the fly\n");
+    av_log(NULL, level, "no guarantees of other correct functioning.\n");
+    av_log(NULL, level, "----------------------\n");
     av_log(NULL, level, "%sconfiguration: " FFMPEG_CONFIGURATION "\n", indent);
 }
 
