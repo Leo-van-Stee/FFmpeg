@@ -788,7 +788,7 @@ static av_cold void uninit(AVFilterContext* ctx)
 		//insert by Leo
 	//now that all work has been done we know the total frames, namely s->frame_cnt
 	//for the last 10 remaining lines I print them here to the av_log
-		av_log(ctx, AV_LOG_INFO, "The last %d frames\n", s->frame_cnt); //Leo
+		av_log(ctx, AV_LOG_INFO, "The very last %d frames\n", s->frame_cnt); //Leo
 
 		char MyLine[512]; //Leo
 		for (int MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
