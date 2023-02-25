@@ -196,7 +196,7 @@ static int do_vmaf(FFFrameSync *fs)
 
 		int MyFrame = s->frame_cnt - 10;
 
-        if MyFrame < 0 continue;
+        if (MyFrame < 0) continue;
         int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
         if (err) {
             av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
