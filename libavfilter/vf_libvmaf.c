@@ -778,7 +778,7 @@ static av_cold void uninit(AVFilterContext *ctx)
         char MyLine[512]; //Leo
         for (unsigned MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
             vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
-            av_log(NULL, AV_LOG_INFO, "24FEBE: %s\n", MyLine);
+            av_log(NULL, AV_LOG_INFO, "ZWECHONv01: %s\n", MyLine);
             }
         //end insert by Leo
 
