@@ -138,6 +138,16 @@ static int copy_picture_data(AVFrame *src, VmafPicture *dst, unsigned bpc)
     return 0;
 }
 
+/*The function starts by getting the input frames from the FFFrameSync object fs, which contains the reference and distorted frames.
+If there is no reference frame or if the filter has been disabled, the function returns immediately.
+
+Then, it creates VmafPicture structures pic_ref and pic_dist and copies the pixel data from the reference and distorted frames to these structures using the copy_picture_data function. This function is responsible for copying the frame data to the appropriate buffer based on the pixel format and bit depth. If there is an error during the copy, the function returns with an appropriate error code.
+
+After both pictures have been allocated and their data copied, the function calls vmaf_read_pictures with the pic_ref and pic_dist structures and the current frame number s->frame_cnt. This function calculates and stores the VMAF scores for the reference and distorted pictures in the internal VMAF state. If there is an error during this operation, the function returns with an appropriate error code.
+
+Overall, the do_vmaf function reads in the input frames, copies their data to VmafPicture structures, and calculates the VMAF score for these pictures using the vmaf_read_pictures function. The resulting VMAF scores are stored in the internal VMAF state for later use.*/
+
+
 static int do_vmaf(FFFrameSync *fs)
 {   AVFilterContext *ctx = fs->parent; 
     LIBVMAFContext *s = ctx->priv;
@@ -178,7 +188,7 @@ static int do_vmaf(FFFrameSync *fs)
     which does have a feature_collector property
   
     */
-
+    
     
 	for (unsigned x = 0; x < s->model_cnt; x++) {
         double vmaf_score;
@@ -186,6 +196,7 @@ static int do_vmaf(FFFrameSync *fs)
 
 		int MyFrame = s->frame_cnt - 10;
 
+        if MyFrame < 0 continue;
         int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
         if (err) {
             av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
@@ -194,7 +205,7 @@ static int do_vmaf(FFFrameSync *fs)
 
 
         //av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
-        av_log(NULL, AV_LOG_INFO,"24FEBE: %s\n", MyLine);
+        av_log(NULL, AV_LOG_INFO,"%s\n", MyLine);
 	}
 /*inserted from*/
 return ff_filter_frame(ctx->outputs[0], dist);
