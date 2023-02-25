@@ -791,7 +791,7 @@ static av_cold void uninit(AVFilterContext* ctx)
 		av_log(ctx, AV_LOG_INFO, "The last %d frames\n", s->frame_cnt); //Leo
 
 		char MyLine[512]; //Leo
-		for (unsigned MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
+		for (int MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
 			av_log(ctx, AV_LOG_INFO, "Frame %u:\n", MyFrame);
 			if (MyFrame < 0) continue;
 			int err = vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
