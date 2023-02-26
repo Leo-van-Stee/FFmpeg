@@ -188,27 +188,28 @@ static int do_vmaf(FFFrameSync* fs)
 	when you call e.g. vmaf_score_at_index, that is in the Netflix libvmaf, it gets treated as a VmafContext
 	which does have a feature_collector property
 
+	BE AWARE:
+	If an unsigned int and a (signed) int are used in the same expression, the signed int gets implicitly converted to unsigned.
+	This is a rather dangerous feature of the C language, and one you therefore need to be aware of. It may or may not be the 
+	cause of your bug. If you want a more detailed answer, you'll have to post some code.
+
 	*/
 
 
 	for (unsigned x = 0; x < s->model_cnt; x++) {
 		double vmaf_score;
-		char MyLine[512]; //Leo
-
-		int MyFrame = s->frame_cnt - 10;
-
-		if (MyFrame < 0) continue;
+		char MyLine[512]; //Zwechon
+		if (s->frame_cnt < 10) continue; //it should never get to calling with a negative frame number...
+		unsigned MyFrame = s->frame_cnt - 10;
 		int err = vmaf_score_at_index(s->vmaf, s->model[x], &vmaf_score, MyFrame);
 		if (err) {
 			av_log(ctx, AV_LOG_ERROR, "problem in do_vmaf in vf_libvmaf.\n");
 			}
 		vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 
-
-		//av_log(NULL, AV_LOG_INFO, "total frames: %d\n", ctx->inputs[0]->nb_frames);
 		av_log(NULL, AV_LOG_INFO, "%s\n", MyLine);
 		}
-	/*inserted from*/
+	/*end inserted by Zwechon*/
 	return ff_filter_frame(ctx->outputs[0], dist);
 	}
 
@@ -788,25 +789,31 @@ static av_cold void uninit(AVFilterContext* ctx)
 		//insert by Leo
 	//now that all work has been done we know the total frames, namely s->frame_cnt
 	//for the last 10 remaining lines I print them here to the av_log
-		av_log(ctx, AV_LOG_INFO, "The very last %d frames\n", s->frame_cnt); //Leo
+		av_log(ctx, AV_LOG_INFO, "The last 10 of a total of %u frames\n", s->frame_cnt); //Leo
 
 		char MyLine[512]; //Leo
-		for (int MyFrame = s->frame_cnt - 10; MyFrame < s->frame_cnt; MyFrame++) {
-			av_log(ctx, AV_LOG_INFO, "Frame %u:\n", MyFrame);
-			if (MyFrame < 0) continue;
+		unsigned int ffstart;
+
+		if (s->frame_cnt < 10)
+			ffstart = 0;
+		else
+			ffstart = s->frame_cnt - 10;
+
+		for (unsigned int MyFrame = ffstart; MyFrame < s->frame_cnt; MyFrame++) {
+			av_log(ctx, AV_LOG_INFO, "Frame %u:\n", MyFrame); //this can be deleted
 			int err = vmaf_get_outputline_sub_Leo(s->vmaf, MyFrame, MyLine);
 			if (err < 0) {
 				av_log(ctx, AV_LOG_ERROR, "Error in vmaf_get_outputline_sub_Leo for frame %u\n", MyFrame);
 				continue;
 				}
-			av_log(NULL, AV_LOG_INFO, "ZWECHONv01: %s\n", MyLine);
+			av_log(NULL, AV_LOG_INFO, "%s\n", MyLine);
 			}
 		//end insert by Leo
 
 
 
 
-		av_log(ctx, AV_LOG_INFO, "VMAF score: %f\n", vmaf_score);
+		av_log(ctx, AV_LOG_INFO, "Averaged VMAF score: %f\n", vmaf_score);
 		}
 
 
